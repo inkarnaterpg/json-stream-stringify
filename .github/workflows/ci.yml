@@ -21,7 +21,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.DESIRED_NODE_VERSION }}
-          always-auth: true
       - name: PNPM Install
         run: npm install -g pnpm@${{ env.DESIRED_PNPM_VERSION }}
 
@@ -40,6 +39,10 @@ jobs:
 
       - name: Run coverage
         run: pnpm run test
+
+      - uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://npm.pkg.github.com'
 
       - name: Publish
         run: pnpm publish --access=public
