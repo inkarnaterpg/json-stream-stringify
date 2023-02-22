@@ -21,6 +21,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: ${{ env.DESIRED_NODE_VERSION }}
+          always-auth: true
       - name: PNPM Install
         run: npm install -g pnpm@${{ env.DESIRED_PNPM_VERSION }}
 
@@ -41,6 +42,6 @@ jobs:
         run: pnpm run test
 
       - name: Publish
-        run: npm publish --access=public
+        run: pnpm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
