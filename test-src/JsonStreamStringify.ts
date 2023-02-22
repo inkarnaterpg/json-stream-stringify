@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
-import type * as Module from '..';
 import expect from 'expect.js';
+import type * as Module from '..';
 
 const nodeVersion = parseInt(process.version.split('.')[0].slice(1), 10);
 

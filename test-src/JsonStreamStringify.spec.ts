@@ -1,7 +1,4 @@
-/* istanbul ignore file */
-
 import { Readable } from 'stream';
-// tslint:disable-next-line:import-name
 import expect from 'expect.js';
 import { JsonStreamStringify } from './JsonStreamStringify';
 
@@ -21,7 +18,7 @@ function createTest(input, expected, ...args) {
         }
         resolve({ jsonStream });
       })
-      .once('error', err => reject(Object.assign(err, {
+      .once('error', (err) => reject(Object.assign(err, {
         jsonStream,
       })));
   });
@@ -29,7 +26,7 @@ function createTest(input, expected, ...args) {
 
 function readableStream(...args) {
   const stream = new Readable({
-    objectMode: args.some(v => typeof v !== 'string'),
+    objectMode: args.some((v) => typeof v !== 'string'),
   });
   stream._read = () => {
     if (!args.length) return stream.push(null);
@@ -74,7 +71,7 @@ describe('JsonStreamStringify', () => {
 
   it('{undefined:null} should be {"undefined":null}', createTest({ undefined: null }, '{"undefined":null}'));
 
-  it('{"":null} should be {"":null}', createTest({ "": null }, '{"":null}'));
+  it('{"":null} should be {"":null}', createTest({ '': null }, '{"":null}'));
 
   it('{a:undefined} should be {}', createTest({ a: undefined }, '{}'));
 
@@ -96,7 +93,8 @@ describe('JsonStreamStringify', () => {
         return 1;
       }
       return v;
-    }));
+    },
+  ));
 
   it('{a:1, b:2} should be {"a":1}', createTest(
     {
@@ -116,7 +114,8 @@ describe('JsonStreamStringify', () => {
       if (k === undefined) return v;
       expect(['a', 'b', undefined]).to.contain(k);
       return v;
-    }));
+    },
+  ));
 
   it('{a:1,b:2} should be {"b":2}', createTest(
     {
@@ -124,45 +123,54 @@ describe('JsonStreamStringify', () => {
       b: 2,
     },
     '{"b":2}',
-    ['b']));
+    ['b'],
+  ));
 
   it('{a:1} should be {"a":1}', createTest(
     {
       a: 1,
     },
-    '{"a":1}'));
+    '{"a":1}',
+  ));
 
   it('{a:1,b:undefined} should be {"a":1}', createTest(
     {
       a: 1,
       b: undefined,
     },
-    '{"a":1}'));
+    '{"a":1}',
+  ));
 
   it('{a:1,b:Promise(undefined)} should be {"a":1}', createTest(
     {
       a: 1,
       b: Promise.resolve(undefined),
     },
-    '{"a":1}'));
+    '{"a":1}',
+  ));
 
   it('{a:function(){}, b: "b"} should be {"b": "b"}', createTest(
     {
       // tslint:disable-next-line:function-name
-      a() {},
+      a() {
+      },
       b: 'b',
     },
-    '{"b":"b"}'));
+    '{"b":"b"}',
+  ));
 
-  it('[function(){}] should be [null]', createTest([function a() {}], '[null]'));
+  it('[function(){}] should be [null]', createTest([function a() {
+  }], '[null]'));
 
-  it('[function(){}, undefined] should be [null,null]', createTest([function a() {}, undefined], '[null,null]'));
+  it('[function(){}, undefined] should be [null,null]', createTest([function a() {
+  }, undefined], '[null,null]'));
 
   it('{a:date} should be {"a":date.toJSON()}', createTest(
     {
       a: date,
     },
-    `{"a":"${date.toJSON()}"}`));
+    `{"a":"${date.toJSON()}"}`,
+  ));
 
   it('({a:1,b:{c:2}}) should be {"a":1,"b":{"c":2}}', createTest(
     {
@@ -171,27 +179,30 @@ describe('JsonStreamStringify', () => {
         c: 2,
       },
     },
-    '{"a":1,"b":{"c":2}}'));
+    '{"a":1,"b":{"c":2}}',
+  ));
 
   it('{a:[1], "b": 2} should be {"a":[1],"b":2}', createTest(
     {
       a: [1],
       b: 2,
     },
-    '{"a":[1],"b":2}'));
+    '{"a":[1],"b":2}',
+  ));
 
   it('[] should be []', createTest([], '[]'));
 
   it('[[[]],[[]]] should be [[[]],[[]]]', createTest(
     [
       [
-      [],
+        [],
       ],
       [
-      [],
+        [],
       ],
     ],
-    '[[[]],[[]]]'));
+    '[[[]],[[]]]',
+  ));
 
   it('[1, undefined, 2] should be [1,null,2]', createTest([1, undefined, 2], '[1,null,2]'));
 
@@ -209,19 +220,21 @@ describe('JsonStreamStringify', () => {
         return fn(Promise.resolve(1));
       },
     },
-    '1'));
+    '1',
+  ));
 
   it('Promise.reject(Error) should emit Error', () => {
     const err = new Error('should emit error');
     return createTest(new Promise((resolve, reject) => reject(err)), '')()
-      .then(() => new Error('exepected error to be emitted'), err1 => expect(err1).to.be(err));
+      .then(() => new Error('exepected error to be emitted'), (err1) => expect(err1).to.be(err));
   });
 
   it('{a:Promise(1)} should be {"a":1}', createTest(
     {
       a: Promise.resolve(1),
     },
-    '{"a":1}'));
+    '{"a":1}',
+  ));
 
   it('readableStream(1) should be [1]', createTest(readableStream(1), '[1]'));
 
@@ -231,7 +244,7 @@ describe('JsonStreamStringify', () => {
     const err = new Error('should emit error');
     return createTest({
       a: [readableStream(1, err, 2)],
-    },                '')()
+    }, '')()
       .then(() => new Error('exepected error to be emitted'), (err1) => {
         // expect(err.jsonStream.stack).to.eql(['a', 0]);
         expect(err1).to.be(err);
@@ -245,7 +258,7 @@ describe('JsonStreamStringify', () => {
 
   it('EndedReadableStream(1, 2, 3, 4, 5, 6, 7) should emit Error', () => {
     const stream = readableStream(1, 2, 3, 4, 5, 6, 7);
-    return createTest(new Promise(resolve => stream.once('end', () => resolve(stream)).resume()), '[1,2,3,4,5,6,7]')()
+    return createTest(new Promise((resolve) => stream.once('end', () => resolve(stream)).resume()), '[1,2,3,4,5,6,7]')()
       .then(() => new Error('exepected error to be emitted'), (err) => {
         expect(err.message).to.be('Readable Stream has ended before it was serialized. All stream data have been lost');
       });
@@ -253,7 +266,7 @@ describe('JsonStreamStringify', () => {
 
   it('{a:ReadableStream(1,2,3)} should be {"a":[1,2,3]}', createTest({
     a: readableStream(1, 2, 3),
-  },                                                                 '{"a":[1,2,3]}'));
+  }, '{"a":[1,2,3]}'));
 
   it('readableStream(\'a\', \'b\', \'c\') should be "abc"', createTest(readableStream('a', 'b', 'c'), '"abc"'));
 
@@ -284,7 +297,8 @@ describe('JsonStreamStringify', () => {
         date,
       }),
     },
-    `{"a":[{"name":"name","date":"${date.toJSON()}"}]}`));
+    `{"a":[{"name":"name","date":"${date.toJSON()}"}]}`,
+  ));
 
   it(`{ a: readableStream({name: 'name', arr: [], date: date }) } should be {"a":[{"name":"name","arr":[],"date":"${date.toJSON()}"}]}`, createTest(
     {
@@ -295,7 +309,8 @@ describe('JsonStreamStringify', () => {
         date,
       }),
     },
-    `{"a":[{"name":"name","arr":[],"date":"${date.toJSON()}"}]}`));
+    `{"a":[{"name":"name","arr":[],"date":"${date.toJSON()}"}]}`,
+  ));
 
   describe('space option', () => {
     it('{ a: 1 } should be {\\n  "a": 1\\n}', createTest({ a: 1 }, '{\n  "a": 1\n}', undefined, 2));
@@ -306,20 +321,22 @@ describe('JsonStreamStringify', () => {
   });
 
   describe('cyclic structure', () => {
-    const cyclicData0 : any = {};
+    const cyclicData0: any = {};
     cyclicData0.a = cyclicData0;
     it('{ a: a } should be {"a":{"$ref":"$"}}', () => createTest(cyclicData0, '{"a":{"$ref":"$"}}', undefined, undefined, true));
 
-    const cyclicData1 : any = {};
+    const cyclicData1: any = {};
     cyclicData1.a = cyclicData1;
     cyclicData1.b = [cyclicData1, {
       a: cyclicData1,
     }];
     cyclicData1.b[3] = readableStream(cyclicData1.b[1]);
-    it('{a: a, b: [a, { a: a },,readableStream(b.1)]} should be {"a":{"$ref":"$"},"b":[{"$ref":"$"},{"a":{"$ref":"$"}},null,[{"$ref":"$[\\"b\\"][1]"}]]}',
-       createTest(cyclicData1, '{"a":{"$ref":"$"},"b":[{"$ref":"$"},{"a":{"$ref":"$"}},null,[{"$ref":"$[\\"b\\"][1]"}]]}', undefined, undefined, true));
+    it(
+      '{a: a, b: [a, { a: a },,readableStream(b.1)]} should be {"a":{"$ref":"$"},"b":[{"$ref":"$"},{"a":{"$ref":"$"}},null,[{"$ref":"$[\\"b\\"][1]"}]]}',
+      createTest(cyclicData1, '{"a":{"$ref":"$"},"b":[{"$ref":"$"},{"a":{"$ref":"$"}},null,[{"$ref":"$[\\"b\\"][1]"}]]}', undefined, undefined, true),
+    );
 
-    const cyclicData2 : any = {};
+    const cyclicData2: any = {};
     const data2 = {
       a: 'deep',
     };
@@ -327,8 +344,10 @@ describe('JsonStreamStringify', () => {
       b: data2,
     });
     cyclicData2.b = data2;
-    it('{ a: Promise({ b: { a: \'deep\' } }), b: a.b } should be {"a":{"b":{"a":"deep"}},"b":{"$ref":"$[\\"a\\"][\\"b\\"]"}}',
-       createTest(cyclicData2, '{"a":{"b":{"a":"deep"}},"b":{"$ref":"$[\\"a\\"][\\"b\\"]"}}', undefined, undefined, true));
+    it(
+      '{ a: Promise({ b: { a: \'deep\' } }), b: a.b } should be {"a":{"b":{"a":"deep"}},"b":{"$ref":"$[\\"a\\"][\\"b\\"]"}}',
+      createTest(cyclicData2, '{"a":{"b":{"a":"deep"}},"b":{"$ref":"$[\\"a\\"][\\"b\\"]"}}', undefined, undefined, true),
+    );
   });
 
   describe('circular structure', () => {
@@ -383,5 +402,39 @@ describe('JsonStreamStringify', () => {
       return;
     }
     throw new Error('expected error to be thrown');
+  });
+
+  describe('max depth', () => {
+    const a = {
+      a1: {
+        a2: {
+          a3: {
+            a4: {
+              foo: 'bar',
+              num: 1,
+              arr: [{ foo: 'bar', num: 1 }, { foo: 'bar', num: 2 }],
+            },
+
+            foo: 'bar',
+            num: 1,
+            arr: [{ foo: 'bar', num: 1 }, { foo: 'bar', num: 2 }],
+          },
+
+          foo: 'bar',
+          num: 1,
+          arr: [{ foo: 'bar', num: 1 }, { foo: 'bar', num: 2 }],
+        },
+
+        foo: 'bar',
+        num: 1,
+        arr: [{ foo: 'bar', num: 1 }, { foo: 'bar', num: 2 }],
+      },
+    };
+
+    it('maxDepth should stringify correctly with maxDepth 0', createTest(a, JSON.stringify(a), undefined, undefined, false, 0));
+    it('maxDepth should stringify correctly with maxDepth 1', createTest(a, JSON.stringify(a), undefined, undefined, false, 1));
+    it('maxDepth should stringify correctly with maxDepth 2', createTest(a, JSON.stringify(a), undefined, undefined, false, 2));
+    it('maxDepth should stringify correctly with maxDepth 3', createTest(a, JSON.stringify(a), undefined, undefined, false, 3));
+    it('maxDepth should stringify correctly with maxDepth 4', createTest(a, JSON.stringify(a), undefined, undefined, false, 4));
   });
 });
