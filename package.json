@@ -1,15 +1,12 @@
 {
-  "name": "json-stream-stringify",
-  "description": "JSON.Stringify as a readable stream",
-  "version": "3.0.1",
+  "name": "@ink/json-stream-stringify",
+  "description": "JSON.Stringify as a readable stream.  This version has been updated with a maxDepth option.",
+  "version": "1.0.0",
   "license": "MIT",
   "author": "Faleij <faleij@gmail.com> (https://github.com/faleij)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Faleij/json-stream-stringify.git"
-  },
-  "bugs": {
-    "url": "https://github.com/faleij/json-stream-stringify/issues"
+    "url": "git+https://github.com/inkarnaterpg/json-stream-stringify"
   },
   "files": [
     "lib/**/*"
@@ -63,6 +60,7 @@
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-mocha": "^10.1.0",
     "eslint-plugin-react": "^7.32.2",
     "expect.js": "0.3.1",
     "mocha": "10.0.0",

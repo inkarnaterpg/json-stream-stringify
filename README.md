@@ -45,11 +45,11 @@ JSON Stringify as a Readable Stream with rescursive resolving of any readable st
 ## Install
 
 ```bash
-npm install --save json-stream-stringify
+pnpm install --save json-stream-stringify
 
 # Optional if you need polyfills
 # Make sure to include these if you target NodeJS <=v6 or browsers
-npm install --save @babel/polyfill @babel/runtime
+pnpm install --save @babel/polyfill @babel/runtime
 ```
 
 ## Usage
@@ -112,6 +112,9 @@ Streaming conversion of ``value`` to JSON string.
 - ``cycle`` Optional ``Boolean``  
   ``true`` enables cycling of cyclical structures and dags.  
   To restore cyclical structures; use [Crockfords Retrocycle method](https://github.com/douglascrockford/JSON-js) on the parsed object (not included in this module).
+
+- ``maxDepth`` Optional ``Number``
+  When ``maxDepth`` is set, objects nested deeper than the maxDepth will be parsed all at once.
 
 #### Returns
 
