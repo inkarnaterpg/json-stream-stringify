@@ -37,6 +37,7 @@
   "scripts": {
     "lint": "eslint \"src/**/*.ts\" && echo ✅ eslint passed",
     "build": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c rollup.config.js",
+    "build-prod": "cross-env NODE_ENV=production node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c rollup.config.js",
     "build:watch": "npm run build -- --watch",
     "test": "node node_modules/mocha/bin/mocha --require source-map-support/register -R spec -b \"test/*.spec.js\"",
     "coverage": "node node_modules/nyc/bin/nyc.js npm test"
@@ -53,11 +54,13 @@
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@types/expect.js": "^0.3.29",
     "@types/mocha": "^9.1.1",
+    "@types/node": "^18.14.0",
     "@types/readable-stream": "^2.3.14",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.53.0",
     "core-js": "^3.24.0",
     "coveralls": "3.1.1",
+    "cross-env": "^7.0.3",
     "es-check": "^7.0.0",
     "eslint": "^8.20.0",
     "eslint-config-airbnb": "^19.0.4",
