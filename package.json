@@ -8,9 +8,6 @@
     "type": "git",
     "url": "git+https://github.com/inkarnaterpg/json-stream-stringify"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "files": [
     "lib/**/*"
   ],

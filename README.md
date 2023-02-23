@@ -44,14 +44,6 @@ JSON Stringify as a Readable Stream with rescursive resolving of any readable st
 
 ## Install
 
-This package is hosted under @inkarnaterpg's Github packages, which requires you to add or update the `.npmrc` file in your repositories root with the following line to add the @inkarnaterpg scope: 
-
-```
-@inkarnaterpg:registry=https://npm.pkg.github.com
-```
-
-Then you can install this package normally:
-
 ```bash
 pnpm add @inkarnaterpg/json-stream-stringify
 ```
