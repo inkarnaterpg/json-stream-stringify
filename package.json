@@ -1,7 +1,7 @@
 {
   "name": "@inkarnaterpg/json-stream-stringify",
   "description": "JSON.Stringify as a readable stream.  This version has been updated with a maxDepth option.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "author": "Faleij <faleij@gmail.com> (https://github.com/faleij)",
   "repository": {
