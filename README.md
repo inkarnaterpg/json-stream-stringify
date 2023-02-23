@@ -1,4 +1,4 @@
-# JSON Stream Stringify
+# JSON Stream Stringify (@inkarnaterpg/json-stream-stringify)
 
 [![NPM version][npm-image]][npm-url]
 [![License][license-image]](LICENSE)
