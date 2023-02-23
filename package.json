@@ -1,5 +1,5 @@
 {
-  "name": "@inkarnate/json-stream-stringify",
+  "name": "@inkarnaterpg/json-stream-stringify",
   "description": "JSON.Stringify as a readable stream.  This version has been updated with a maxDepth option.",
   "version": "1.0.0",
   "license": "MIT",
